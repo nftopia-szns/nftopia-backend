@@ -4,7 +4,6 @@ import { AggregationsAggregate } from '@elastic/elasticsearch/lib/api/typesWithB
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SearchDto } from './dto';
-import SearchResultDto from './dto/search-result.dto';
 
 @Injectable()
 export class ElasticsearchService {
