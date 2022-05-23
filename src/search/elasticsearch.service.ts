@@ -23,17 +23,25 @@ export class ElasticsearchService {
 
     async search(searchDto: SearchDto): Promise<SearchResponse<unknown, Record<string, AggregationsAggregate>>> {
         const resultsPerPage = this.configService.get<number>("ES_RESULTS_PER_PAGE")
-        const takeResultsFrom = searchDto.page ? ((searchDto.page - 1)*resultsPerPage) : 0;
+        const takeResultsFrom = searchDto.page ? ((searchDto.page - 1) * resultsPerPage) : 0;
 
         const searchResp = await this.client.search({
             from: takeResultsFrom,
             size: resultsPerPage,
             query: {
-                match: {
-                    name: searchDto.query
+                multi_match: {
+                    query: searchDto.query,
+                    fields: [
+                        "name",
+                        "description",
+                        "attributes.coordinate",
+                    ]
                 }
             }
         })
+
+        console.log(searchResp);
+
 
         return searchResp
     }
