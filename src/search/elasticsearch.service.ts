@@ -22,7 +22,7 @@ export class ElasticsearchService {
     }
 
     async search(searchDto: SearchDto): Promise<SearchResponse<unknown, Record<string, AggregationsAggregate>>> {
-        const resultsPerPage = this.configService.get<number>("ES_RESULTS_PER_PAGE")
+        const resultsPerPage = searchDto.pageSize || 10
         const takeResultsFrom = searchDto.page ? ((searchDto.page - 1) * resultsPerPage) : 0;
 
         const searchResp = await this.client.search({
