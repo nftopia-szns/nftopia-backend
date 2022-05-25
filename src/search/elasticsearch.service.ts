@@ -54,9 +54,6 @@ export class ElasticsearchService {
             }
         })
 
-        console.log(searchResp);
-
-
         return searchResp
     }
 }
