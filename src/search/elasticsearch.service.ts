@@ -14,11 +14,25 @@ export class ElasticsearchService {
     ) {
         const cloudId = this.configService.get<string>("ES_CLOUD_ID")
         const apiKey = this.configService.get<string>("ES_API_KEY")
+        if (cloudId && apiKey) {
+            this.client = new Client({
+                cloud: { id: cloudId },
+                auth: { apiKey: apiKey }
+            })
+            return
+        }
 
-        this.client = new Client({
-            cloud: { id: cloudId },
-            auth: { apiKey: apiKey }
-        })
+        const esNodeHost = this.configService.get<string>("ES_NODE_HOST")
+        const esNodePort = this.configService.get<string>("ES_NODE_PORT")
+        if (esNodeHost && esNodePort) {
+            const esNodeUrl = `http://${esNodeHost}:${esNodePort}`
+            this.client = new Client({
+                node: esNodeUrl
+            })
+            return
+        }
+
+        throw new Error("Elasticsearch connection error: neither elastic cloud or docker are not connected.")
     }
 
     async search(searchDto: SearchDto): Promise<SearchResponse<unknown, Record<string, AggregationsAggregate>>> {
