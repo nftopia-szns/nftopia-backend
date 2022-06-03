@@ -6,9 +6,7 @@ WORKDIR /var/www/nftopia-backend
 
 COPY . .
 
-RUN npm install -g pnpm
-
-RUN pnpm i
-RUN pnpm run build
+RUN npm install
+RUN npm run build
 
 CMD ["node", "dist/main.js"]
