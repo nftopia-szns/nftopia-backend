@@ -40,6 +40,11 @@ export class ElasticsearchService {
         const takeResultsFrom = searchDto.page ? ((searchDto.page - 1) * resultsPerPage) : 0;
 
         const searchResp = await this.client.search({
+            // TODO: dynamically specify indices from search dto
+            index: [
+                'decentraland-ethereum-3-parcel',
+                'decentraland-ethereum-3-estate',
+            ],
             from: takeResultsFrom,
             size: resultsPerPage,
             query: {
