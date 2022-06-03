@@ -42,8 +42,7 @@ export class ElasticsearchService {
         const searchResp = await this.client.search({
             // TODO: dynamically specify indices from search dto
             index: [
-                'decentraland-ethereum-3-parcel',
-                'decentraland-ethereum-3-estate',
+                'decentraland-ethereum-3',
             ],
             from: takeResultsFrom,
             size: resultsPerPage,
