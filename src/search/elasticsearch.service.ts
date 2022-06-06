@@ -60,4 +60,18 @@ export class ElasticsearchService {
 
         return searchResp
     }
+
+    async searchById(id: string): Promise<SearchResponse<unknown, Record<string, AggregationsAggregate>>> {
+        return await this.client.search({
+            // TODO: dynamically specify indices from search dto
+            index: [
+                'decentraland-ethereum-3',
+            ],
+            query: {
+                match: {
+                    id: id
+                }
+            }
+        })
+    }
 }

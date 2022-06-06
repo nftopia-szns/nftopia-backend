@@ -4,13 +4,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SearchController } from './search/search.controller';
 import { SearchModule } from './search/search.module';
+import { AssetModule } from './asset/asset.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
-    SearchModule
+    SearchModule,
+    AssetModule
   ],
   controllers: [
     AppController,
