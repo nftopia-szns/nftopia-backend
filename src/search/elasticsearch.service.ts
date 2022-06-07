@@ -3,7 +3,7 @@ import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
 import { AggregationsAggregate } from '@elastic/elasticsearch/lib/api/typesWithBodyKey';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SearchDto } from './dto';
+import { EnhancedSearchDto } from './dto';
 
 @Injectable()
 export class ElasticsearchService {
@@ -35,43 +35,17 @@ export class ElasticsearchService {
         throw new Error("Elasticsearch connection error: neither elastic cloud or docker are not connected.")
     }
 
-    async search(searchDto: SearchDto): Promise<SearchResponse<unknown, Record<string, AggregationsAggregate>>> {
+    async enhancedSearch(searchDto: EnhancedSearchDto): Promise<SearchResponse<unknown, Record<string, AggregationsAggregate>>> {
         const resultsPerPage = searchDto.pageSize || 10
         const takeResultsFrom = searchDto.page ? ((searchDto.page - 1) * resultsPerPage) : 0;
 
         const searchResp = await this.client.search({
-            // TODO: dynamically specify indices from search dto
-            index: [
-                'decentraland-ethereum-3',
-            ],
+            index: searchDto.indices,
             from: takeResultsFrom,
             size: resultsPerPage,
-            query: {
-                multi_match: {
-                    query: searchDto.query,
-                    fields: [
-                        "name",
-                        "description",
-                        "attributes.coordinate",
-                    ]
-                }
-            }
+            query: searchDto.query,
         })
 
         return searchResp
-    }
-
-    async searchById(id: string): Promise<SearchResponse<unknown, Record<string, AggregationsAggregate>>> {
-        return await this.client.search({
-            // TODO: dynamically specify indices from search dto
-            index: [
-                'decentraland-ethereum-3',
-            ],
-            query: {
-                match: {
-                    id: id
-                }
-            }
-        })
     }
 }

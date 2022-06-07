@@ -1,19 +1,14 @@
-import { Body, Controller, Post, Query } from '@nestjs/common';
-import { SearchDto } from './dto';
+import { Body, Controller, HttpCode, Post, Query } from '@nestjs/common';
+import { EnhancedSearchDto } from './dto';
 import SearchResultDto from './dto/search-result.dto';
 import { SearchService } from './search.service';
 
 @Controller('search')
 export class SearchController {
   constructor(private searchService: SearchService) { }
-
   @Post()
-  async search(@Body() searchDto: SearchDto): Promise<SearchResultDto> {
-    return await this.searchService.search(searchDto);
-  }
-
-  @Post('/byId')
-  async searchById(@Query('id') id: string): Promise<SearchResultDto> {
-    return await this.searchService.searchById(id)
+  @HttpCode(200)
+  async enhancedSearch(@Body() searchDto: EnhancedSearchDto): Promise<SearchResultDto> {
+    return await this.searchService.enhancedSearch(searchDto)
   }
 }
