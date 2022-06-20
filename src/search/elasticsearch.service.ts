@@ -44,6 +44,7 @@ export class ElasticsearchService {
             from: takeResultsFrom,
             size: resultsPerPage,
             query: searchDto.query,
+            sort: searchDto.sort
         })
 
         return searchResp
